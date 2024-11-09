@@ -1,3 +1,5 @@
+#include <forward_list>
+
 template<class T>
 struct Node {
     T data;
@@ -6,5 +8,9 @@ struct Node {
 
 template<class T>
 class SinglyLinked {
+protected:
     Node<T>* head;
+
+public:
+    SinglyLinked() noexcept {  }
 };
