@@ -85,6 +85,24 @@ public:
             pred->next = nullptr;
         }
     }
+    bool delete_where(const T value) noexcept {
+        if (empty()) return false;
+        if (head->data == value) {
+            pop_front();
+            return true;
+        } 
+        else {
+            for (SinglyNode<T>* pred = head, *curr = head->next; curr; pred = curr, curr = curr->next) {
+                if (curr->data == value) {
+                    pred->next = curr->next;
+                    delete curr;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    inline void delete_all_where(const T value) noexcept { while(delete_where(value)); } 
 };
 
 #endif
