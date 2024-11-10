@@ -36,6 +36,12 @@ public:
             push_front(*it);
         }
     }
+    SinglyLinked(const SinglyLinked<T>& other) noexcept {
+        other.for_each([this](const T& item){
+            this->push_front(item);
+        });
+        reverse();
+    }
     ~SinglyLinked() {
         for (SinglyNode<T>* node = head, *temp; node;) {
             temp = node;
