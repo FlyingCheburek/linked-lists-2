@@ -1,6 +1,6 @@
 #include "linked_list/singly_linked.hpp"
 
-// for debug pourposes 
+// for debug purposes 
 inline void print_item(const int& i) noexcept {
     std::cout << i << "\n";
 }
