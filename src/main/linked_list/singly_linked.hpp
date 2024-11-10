@@ -43,7 +43,18 @@ public:
             delete temp;
         }
     }
-
+    void reverse() noexcept {
+        if (empty()) return;
+        if (!head->next) return;
+        SinglyNode<T>* pred = nullptr;
+        for (SinglyNode<T> *curr = head, *next = pred; curr;) {
+            next = curr->next;
+            curr->next = pred;
+            pred = curr;
+            curr = next;
+        }
+        head = pred;
+    }
     inline bool empty() const noexcept {
         return head == nullptr;
     }

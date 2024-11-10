@@ -7,7 +7,7 @@ inline void print_item(const int& i) noexcept {
 
 
 int main() {
-    SinglyLinked<int> list({1, 1, 2, 2, 1, 5, 5, 1});
-    list.for_each(print_item);
+    SinglyLinked<int> list({1, 2, 3});
+    
     return 0;
 }
