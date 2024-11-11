@@ -23,7 +23,6 @@ protected:
         while (back->next) back = back->next;
         return back;
     }
-
 public:
     SinglyLinked() noexcept {  }
     SinglyLinked(const std::vector<T>&& items) noexcept {
@@ -48,6 +47,16 @@ public:
             node = node->next;
             delete temp;
         }
+    }
+    SinglyNode<T>* operator[](const uint64_t index) const {
+        if (!index) return head;
+        SinglyNode<T>* node = head;
+        for (uint64_t x=1; x <= index; x++) {
+            if (!node) throw std::out_of_range("List index out of range.");
+            node = node->next;
+        }
+        if (!node) throw std::out_of_range("List index out of range.");
+        return node;
     }
     void reverse() noexcept {
         if (empty()) return;
@@ -102,7 +111,7 @@ public:
             pred->next = nullptr;
         }
     }
-    bool delete_where(const T value) noexcept {
+    bool erase_where(const T value) noexcept {
         if (empty()) return false;
         if (head->data == value) {
             pop_front();
@@ -119,7 +128,18 @@ public:
         }
         return false;
     }
-    inline void delete_all_where(const T value) noexcept { while(delete_where(value)); } 
+    inline void erase_all_where(const T value) noexcept { while(erase_where(value)); } 
+    void erase(SinglyNode<T>* node) {
+        if (empty()) return;
+        if (node == head) pop_front();
+        for (SinglyNode<T>* pred = head, *curr = head->next; curr; pred = curr, curr = curr->next) {
+            if (curr == node) {
+                pred->next = curr->next;
+                delete curr;
+                break;
+            } 
+        }
+    }
 };
 
 #endif

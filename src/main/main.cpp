@@ -8,10 +8,6 @@ inline void print_item(const T& i) noexcept {
 
 
 int main() {
-    SinglyLinked<int> list({1, 2, 3});
-    SinglyLinked<int> list2(list);
-    list.for_each(print_item<int>);
-    std::cout << "\n\n";
-    list2.for_each(print_item<int>);
+    
     return 0;
 }

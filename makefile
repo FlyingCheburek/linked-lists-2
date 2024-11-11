@@ -1,5 +1,5 @@
 all: run no-bin
-	
+
 run: build
 	./program
 
