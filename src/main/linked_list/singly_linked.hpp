@@ -127,6 +127,10 @@ public:
         if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
         ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
     }
+    void insert_after(const uint64_t index, const T data) {
+        SinglyNode<T>* temp = (SinglyNode<T>*)this->operator[](index);
+        temp->next = new SinglyNode<T>(data, temp->next);
+    }
     void insert_before(const SinglyNode<T>* at, const T data) {
         if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
         if (at == head){
@@ -135,6 +139,16 @@ public:
         } 
         SinglyNode<T>* pred = head;
         for (; pred->next != at; pred = pred->next);
+        pred->next = new SinglyNode<T>(data, pred->next); 
+    }
+    void insert_before(const uint64_t index, const T data) {
+        if (!index){
+           push_front(data); 
+           return;
+        } 
+        SinglyNode<T>* pred = head;
+        const SinglyNode<T>* temp = this->operator[](index);
+        for (; pred->next != temp; pred = pred->next);
         pred->next = new SinglyNode<T>(data, pred->next); 
     }
     bool erase_where(const T value) noexcept {
