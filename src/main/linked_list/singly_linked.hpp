@@ -1,6 +1,7 @@
 #include <vector>
 #include <functional>
 #include <stdexcept>
+#include <iostream>
 
 #ifndef SINGLY_LINKED_HPP
 
@@ -28,6 +29,9 @@ protected:
             if (node == i) return true;
         }
         return false;
+    }
+    void quick_insert_after(const SinglyNode<T>* at, const T data) noexcept {
+        ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
     }
 
 public:
@@ -151,6 +155,46 @@ public:
         for (; pred->next != temp; pred = pred->next);
         pred->next = new SinglyNode<T>(data, pred->next); 
     }
+    void append(const SinglyLinked<T>& other) {
+        SinglyNode<T>* tail = get_back();
+        bool first = true;
+        other.for_each([this, &tail, &first](const T& data){
+            if (!tail && first) {
+                this->push_front(data);
+                first = false;
+                tail = get_back();
+            } 
+            else {
+                tail->next = new SinglyNode<T>(data);
+                tail = tail->next;
+            }
+        });
+    }
+    void merge(const SinglyLinked<T>& other, const bool&& ensure_sort = false) noexcept {
+        if (other.empty()) return;
+        if (empty()) append(other);
+        else {
+            SinglyNode<T>* o_curr = other.head, *curr = head, *head_ref = head;
+            if (o_curr->data < head_ref->data) {
+                push_front(o_curr->data);
+                curr = head;
+                o_curr = o_curr->next;
+                while (o_curr && o_curr->data < head_ref->data) {
+                    quick_insert_after(curr, o_curr->data);
+                    curr = curr->next;
+                    o_curr = o_curr->next;
+                }
+                curr = head_ref;
+            }
+            while (o_curr) {
+                if (o_curr->data > head_ref->data) {
+                    while (head_ref->next && head_ref->next->data < o_curr->data) head_ref = head_ref->next;
+                } 
+                quick_insert_after(head_ref, o_curr->data);
+                o_curr = o_curr->next;
+            }
+        }
+    }
     bool erase_where(const T value) noexcept {
         if (empty()) return false;
         if (head->data == value) {
@@ -180,7 +224,6 @@ public:
             } 
         }
     }
-    
 };
 
 #endif
