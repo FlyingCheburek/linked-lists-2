@@ -1,7 +1,6 @@
 #include <vector>
 #include <functional>
 #include <stdexcept>
-#include <iostream>
 
 #ifndef SINGLY_LINKED_HPP
 
@@ -23,6 +22,14 @@ protected:
         while (back->next) back = back->next;
         return back;
     }
+    bool in_list(const SinglyNode<T>* node) const noexcept {
+        if (empty()) return false;
+        for (SinglyNode<T>* i = head; i; i = i->next) {
+            if (node == i) return true;
+        }
+        return false;
+    }
+
 public:
     SinglyLinked() noexcept {  }
     SinglyLinked(const std::vector<T>&& items) noexcept {
@@ -48,7 +55,7 @@ public:
             delete temp;
         }
     }
-    SinglyNode<T>* operator[](const uint64_t index) const {
+    const SinglyNode<T>* operator[](const uint64_t index) const {
         if (!index) return head;
         SinglyNode<T>* node = head;
         for (uint64_t x=1; x <= index; x++) {
@@ -57,6 +64,11 @@ public:
         }
         if (!node) throw std::out_of_range("List index out of range.");
         return node;
+    }
+    inline uint64_t size() const noexcept {
+        uint64_t siz = 0;
+        for (SinglyNode<T>* i = head; i; i = i->next) siz++;
+        return siz;
     }
     void reverse() noexcept {
         if (empty()) return;
@@ -111,6 +123,20 @@ public:
             pred->next = nullptr;
         }
     }
+    void insert_after(const SinglyNode<T>* at, const T data) {
+        if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
+        ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
+    }
+    void insert_before(const SinglyNode<T>* at, const T data) {
+        if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
+        if (at == head){
+           push_front(data); 
+           return;
+        } 
+        SinglyNode<T>* pred = head;
+        for (; pred->next != at; pred = pred->next);
+        pred->next = new SinglyNode<T>(data, pred->next); 
+    }
     bool erase_where(const T value) noexcept {
         if (empty()) return false;
         if (head->data == value) {
@@ -129,7 +155,7 @@ public:
         return false;
     }
     inline void erase_all_where(const T value) noexcept { while(erase_where(value)); } 
-    void erase(SinglyNode<T>* node) {
+    void erase(const SinglyNode<T>* node) {
         if (empty()) return;
         if (node == head) pop_front();
         for (SinglyNode<T>* pred = head, *curr = head->next; curr; pred = curr, curr = curr->next) {
@@ -140,6 +166,7 @@ public:
             } 
         }
     }
+    
 };
 
 #endif
