@@ -113,13 +113,13 @@ public:
         if (!back) head = new SinglyNode<T>(item);
         else back->next = new SinglyNode<T>(item);
     }
-    void pop_front() noexcept {
+    virtual void pop_front() noexcept {
         if (empty()) return;
         SinglyNode<T>* old = head;
         head = head->next;
         delete old;
     }
-    void pop_back() noexcept {
+    virtual void pop_back() noexcept {
         if (empty()) return;
         if (!head->next) pop_front();
         else {
@@ -139,7 +139,7 @@ public:
     void insert_after(const uint64_t index, const T data) {
         SinglyNode<T>* temp = (SinglyNode<T>*)this->operator[](index);
         temp->next = new SinglyNode<T>(data, temp->next);
-    }
+    } 
     void insert_before(const SinglyNode<T>* at, const T data) {
         if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
         if (at == head){
@@ -201,7 +201,7 @@ public:
         }
         if (ensure_sort) sort();
     }
-    void sort() noexcept {
+    virtual void sort() noexcept {
         if (empty()) return;
         if (!head->next) return;
         while (true) {
@@ -217,7 +217,7 @@ public:
             if (sorted) break;
         }  
     }
-    bool erase_where(const T value) noexcept {
+    virtual bool erase_where(const T value) noexcept {
         if (empty()) return false;
         if (head->data == value) {
             pop_front();
