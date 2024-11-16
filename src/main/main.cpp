@@ -1,4 +1,4 @@
-#include "linked_list/singly_linked.hpp"
+#include "linked_list/doubly_linked.hpp"
 #include <iostream>
 
 // for debug purposes 
@@ -10,6 +10,9 @@ inline void print_item(const T& i) noexcept {
 // ...................
 
 int main() {
+    DoublyLinked<int> list({1,2,3,4,5,6,7,8,9,10}), list2(list);
+    list2.for_each(print_item<int>);
+    _BRK;
     
     return 0;
 }

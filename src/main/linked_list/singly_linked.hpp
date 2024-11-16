@@ -11,6 +11,7 @@ struct SinglyNode {
     SinglyNode() noexcept {  }
     SinglyNode(const T data, SinglyNode<T>* next = nullptr) noexcept : data(data), next(next) {  }
     inline static void swap(SinglyNode<T>* left, SinglyNode<T>* right) noexcept {
+        if (!left || !right) return;
         T temp = left->data;
         left->data = right->data;
         right->data = temp;
@@ -19,7 +20,7 @@ struct SinglyNode {
 
 template<class T>
 class SinglyLinked {
-protected:
+private:
     SinglyNode<T>* head = nullptr;
     SinglyNode<T>* get_back() const noexcept {
         if (empty()) return nullptr;
@@ -73,12 +74,12 @@ public:
         if (!node) throw std::out_of_range("List index out of range.");
         return node;
     }
-    inline uint64_t size() const noexcept {
+    virtual inline uint64_t size() const noexcept {
         uint64_t siz = 0;
         for (SinglyNode<T>* i = head; i; i = i->next) siz++;
         return siz;
     }
-    void reverse() noexcept {
+    virtual void reverse() noexcept {
         if (empty()) return;
         if (!head->next) return;
         SinglyNode<T>* pred = nullptr;
@@ -90,24 +91,24 @@ public:
         }
         head = pred;
     }
-    inline bool empty() const noexcept {
+    virtual inline bool empty() const noexcept {
         return head == nullptr;
     }
-    void for_each(std::function<void(T item)> func) const noexcept {
+    virtual void for_each(std::function<void(T item)> func) const noexcept {
         for (SinglyNode<T>* node = head; node; node = node->next) func(node->data);
     }
-    T front() const {  
+    virtual T front() const {  
         if (empty()) throw std::out_of_range("Cannot acess 'head' pointer from an empty list.");
         return head->data;
     }
-    T back() const {
+    virtual T back() const {
         if (empty()) throw std::out_of_range("Cannot acess 'head' pointer from an empty list.");
         return get_back()->data;
     }
-    void push_front(const T item) noexcept {
+    virtual void push_front(const T item) noexcept {
         head = new SinglyNode<T>(item, head);
     }
-    void push_back(const T item) noexcept {
+    virtual void push_back(const T item) noexcept {
         SinglyNode<T>* back = get_back();
         if (!back) head = new SinglyNode<T>(item);
         else back->next = new SinglyNode<T>(item);
