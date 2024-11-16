@@ -1,7 +1,6 @@
 #include <vector>
 #include <functional>
 #include <stdexcept>
-#include <iostream>
 
 #ifndef SINGLY_LINKED_HPP
 
@@ -10,7 +9,12 @@ struct SinglyNode {
     T data;
     SinglyNode<T>* next = nullptr;
     SinglyNode() noexcept {  }
-    SinglyNode(const T data, SinglyNode<T>* next = nullptr) noexcept : data(data), next(next) {  } 
+    SinglyNode(const T data, SinglyNode<T>* next = nullptr) noexcept : data(data), next(next) {  }
+    inline static void swap(SinglyNode<T>* left, SinglyNode<T>* right) noexcept {
+        T temp = left->data;
+        left->data = right->data;
+        right->data = temp;
+    } 
 };
 
 template<class T>
@@ -170,7 +174,7 @@ public:
             }
         });
     }
-    void merge(const SinglyLinked<T>& other, const bool&& ensure_sort = false) noexcept {
+    void merge(SinglyLinked<T>& other, const bool&& ensure_sort = false) noexcept {
         if (other.empty()) return;
         if (empty()) append(other);
         else {
@@ -194,6 +198,23 @@ public:
                 o_curr = o_curr->next;
             }
         }
+        if (ensure_sort) sort();
+    }
+    void sort() noexcept {
+        if (empty()) return;
+        if (!head->next) return;
+        while (true) {
+            bool sorted = true;
+            for (SinglyNode<T>* pred = head, *curr = head->next; curr;) {
+                if (pred->data > curr->data) {
+                    sorted = false;
+                    SinglyNode<T>::swap(pred, curr);
+                }
+                pred = curr;
+                curr = curr->next;
+            }
+            if (sorted) break;
+        }  
     }
     bool erase_where(const T value) noexcept {
         if (empty()) return false;
