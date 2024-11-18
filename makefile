@@ -1,6 +1,9 @@
 all: run no-bin
 
-run: build
+mem-check: build
+	valgrind ./program
+
+run: build 
 	./program
 
 build: program clean

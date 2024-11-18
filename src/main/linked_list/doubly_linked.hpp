@@ -1,6 +1,7 @@
 #include "singly_linked.hpp"
 
 #ifndef DOUBLY_LINKED_HPP
+#define DOUBLY_LINKED_HPP
 
 template<class T>
 struct DoublyNode : public SinglyNode<T> {
@@ -16,6 +17,8 @@ template<class T>
 class DoublyLinked : public SinglyLinked<T> {
 private:
     DoublyNode<T>* head = nullptr;
+
+protected:
     DoublyNode<T>* get_back() const noexcept {
         if (empty()) return nullptr;
         DoublyNode<T>* back = head;

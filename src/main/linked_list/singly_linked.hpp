@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #ifndef SINGLY_LINKED_HPP
+#define SINGLY_LINKED_HPP
 
 template<class T>
 struct SinglyNode {
@@ -28,14 +29,16 @@ private:
         while (back->next) back = back->next;
         return back;
     }
-    bool in_list(const SinglyNode<T>* node) const noexcept {
+
+protected:
+    virtual bool in_list(const SinglyNode<T>* node) const noexcept {
         if (empty()) return false;
         for (SinglyNode<T>* i = head; i; i = i->next) {
             if (node == i) return true;
         }
         return false;
     }
-    void quick_insert_after(const SinglyNode<T>* at, const T data) noexcept {
+    virtual void quick_insert_after(const SinglyNode<T>* at, const T data) noexcept {
         ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
     }
 
@@ -64,7 +67,7 @@ public:
             delete temp;
         }
     }
-    const SinglyNode<T>* operator[](const uint64_t index) const {
+    virtual const SinglyNode<T>* operator[](const uint64_t index) const {
         if (!index) return head;
         SinglyNode<T>* node = head;
         for (uint64_t x=1; x <= index; x++) {
@@ -132,15 +135,15 @@ public:
             pred->next = nullptr;
         }
     }
-    void insert_after(const SinglyNode<T>* at, const T data) {
+    virtual void insert_after(const SinglyNode<T>* at, const T data) {
         if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
         ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
     }
-    void insert_after(const uint64_t index, const T data) {
+    virtual void insert_after(const uint64_t index, const T data) {
         SinglyNode<T>* temp = (SinglyNode<T>*)this->operator[](index);
         temp->next = new SinglyNode<T>(data, temp->next);
     } 
-    void insert_before(const SinglyNode<T>* at, const T data) {
+    virtual void insert_before(const SinglyNode<T>* at, const T data) {
         if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
         if (at == head){
            push_front(data); 
@@ -150,7 +153,7 @@ public:
         for (; pred->next != at; pred = pred->next);
         pred->next = new SinglyNode<T>(data, pred->next); 
     }
-    void insert_before(const uint64_t index, const T data) {
+    virtual void insert_before(const uint64_t index, const T data) {
         if (!index){
            push_front(data); 
            return;
@@ -160,7 +163,7 @@ public:
         for (; pred->next != temp; pred = pred->next);
         pred->next = new SinglyNode<T>(data, pred->next); 
     }
-    void append(const SinglyLinked<T>& other) {
+    virtual void append(const SinglyLinked<T>& other) {
         SinglyNode<T>* tail = get_back();
         bool first = true;
         other.for_each([this, &tail, &first](const T& data){
@@ -175,7 +178,7 @@ public:
             }
         });
     }
-    void merge(SinglyLinked<T>& other, const bool&& ensure_sort = false) noexcept {
+    virtual void merge(SinglyLinked<T>& other, const bool&& ensure_sort = false) noexcept {
         if (other.empty()) return;
         if (empty()) append(other);
         else {
@@ -235,7 +238,7 @@ public:
         return false;
     }
     inline void erase_all_where(const T value) noexcept { while(erase_where(value)); } 
-    void erase(const SinglyNode<T>* node) {
+    virtual void erase(const SinglyNode<T>* node) {
         if (empty()) return;
         if (node == head) pop_front();
         for (SinglyNode<T>* pred = head, *curr = head->next; curr; pred = curr, curr = curr->next) {
