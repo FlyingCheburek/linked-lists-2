@@ -90,6 +90,14 @@ public:
             func(tail->data);
         }
     }
+    T front() const override {
+        if (empty()) throw std::out_of_range("Cannot acess 'tail' pointer from an empty list.");
+        return tail->next->data;
+    }
+    T back() const override {
+        if (empty()) throw std::out_of_range("Cannot acess 'tail' pointer from an empty list.");
+        return tail->data;
+    }
     void push_front(const T data) noexcept override {
         if (empty()) {
             tail = new SinglyNode<T>(data);
@@ -107,6 +115,43 @@ public:
             tail = tail->next = node;
         }
     }
+    void pop_front() noexcept override {
+        if (empty()) return;
+        if (tail == tail->next) {
+            delete tail;
+            tail = nullptr;
+        }
+        else {
+            SinglyNode<T>* new_head = tail->next->next;
+            delete tail->next;
+            tail->next = new_head;
+        }
+    }
+    void pop_back() noexcept override {
+        if (empty()) return;
+        if (tail == tail->next) {
+            delete tail;
+            tail = nullptr;
+        }
+        else {
+            SinglyNode<T>* head = tail->next, *curr = head;
+            while (curr->next != tail) curr = curr->next;
+            tail = curr;
+            delete tail->next;
+            tail->next = head;
+        }
+    }
+    void insert_after(const SinglyNode<T>* at, const T data) override {
+        if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
+        if (at == tail) push_front(data);
+        else ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
+    }
+    void insert_after(const uint64_t index, const T data) override {
+        SinglyNode<T>* temp = (SinglyNode<T>*)this->operator[](index);
+        if (temp == tail) push_front(data);
+        else temp->next = new SinglyNode<T>(data, temp->next);
+    }
+    
 };
 
 #endif
