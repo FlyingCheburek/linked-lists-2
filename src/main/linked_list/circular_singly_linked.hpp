@@ -196,6 +196,45 @@ public:
             if (sorted) break;
         }
     }
+    void merge(CircularSinglyLinked<T>& other) noexcept {
+        if (other.empty()) return;
+        append(other);
+        sort();
+    }
+    bool erase_where(const T value) noexcept override {
+        if (empty()) return false;
+        if (tail->data == value) {
+            pop_back();
+            return true;
+        }
+        if (tail->next->data == value) {
+            pop_back();
+            return true;
+        }
+        SinglyNode<T>* pred = tail->next, *curr = pred->next;
+        do {
+            if (curr->data == value) {
+                pred->next = curr->next;
+                delete curr;
+                return true;
+            }
+            pred = curr;
+            curr = curr->next;
+        } while(curr != tail->next);
+        return false;
+    }
+    void erase(const SinglyNode<T>* node) noexcept override {
+        if (empty()) return;
+        if (!in_list(node)) throw std::invalid_argument("Node address could not be found.");
+        if (tail == node) pop_back();
+        else if (tail->next == node) pop_front();
+        else {
+            SinglyNode<T>* curr = tail->next;
+            while (curr->next != node) curr = curr->next;
+            curr->next = node->next;
+            delete node;
+        }
+    }
 };
 
 #endif
