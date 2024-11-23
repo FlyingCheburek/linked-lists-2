@@ -179,6 +179,23 @@ public:
         if (other.empty()) return;
         other.for_each([this](const T& x){ this->push_back(x); });
     }
+    void sort() noexcept override {
+        if (empty()) return;
+        if (tail == tail->next) return;
+        while (true) {
+            bool sorted = true;
+            SinglyNode<T>* pred = tail->next, *curr = pred->next;
+            do {
+                if (pred->data > curr->data) {
+                    sorted = false;
+                    SinglyNode<T>::swap(pred, curr);
+                }
+                pred = curr;
+                curr = curr->next;
+            } while(curr != tail->next);
+            if (sorted) break;
+        }
+    }
 };
 
 #endif
