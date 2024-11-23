@@ -163,7 +163,7 @@ public:
         for (; pred->next != temp; pred = pred->next);
         pred->next = new SinglyNode<T>(data, pred->next); 
     }
-    virtual void append(const SinglyLinked<T>& other) {
+    virtual void append(const SinglyLinked<T>& other) noexcept {
         SinglyNode<T>* tail = get_back();
         bool first = true;
         other.for_each([this, &tail, &first](const T& data){

@@ -175,6 +175,10 @@ public:
             curr->next = new SinglyNode<T>(data, at);
         }
     }
+    void append(const CircularSinglyLinked<T>& other) noexcept {
+        if (other.empty()) return;
+        other.for_each([this](const T& x){ this->push_back(x); });
+    }
 };
 
 #endif
