@@ -225,7 +225,6 @@ public:
     }
     void erase(const SinglyNode<T>* node) noexcept override {
         if (empty()) return;
-        if (!in_list(node)) throw std::invalid_argument("Node address could not be found.");
         if (tail == node) pop_back();
         else if (tail->next == node) pop_front();
         else {

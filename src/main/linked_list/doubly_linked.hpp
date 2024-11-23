@@ -163,7 +163,7 @@ public:
         for (; pred->next != temp; pred = pred->next);
         pred->next = new DoublyNode<T>(data, pred->next, pred); 
     }
-    void append(const SinglyLinked<T>& other) {
+    void append(const SinglyLinked<T>& other) noexcept {
         DoublyNode<T>* tail = get_back();
         bool first = true;
         other.for_each([this, &tail, &first](const T& data){

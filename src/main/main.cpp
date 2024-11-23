@@ -1,4 +1,4 @@
-#include "linked_list/circular_singly_linked.hpp"
+#include "linked_list/linked_lists.hpp"
 #include <iostream>
 
 // for debug purposes 
@@ -10,6 +10,9 @@ inline void print_item(const T& i) noexcept {
 // ...................
 
 int main() {
-    
+    SinglyLinked<int> list;
+    DoublyLinked<int> list2;
+    CircularSinglyLinked<int> list3;
+    CircularDoublyLinked<int> list4;
     return 0;
 }
