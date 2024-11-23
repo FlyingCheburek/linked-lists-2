@@ -13,7 +13,7 @@ int main() {
     CircularSinglyLinked<int> list({1, 2, 3, 4, 5, 6, 7});
     list.for_each(print_item<int>);
     _BRK;
-    
+    list.insert_before(uint64_t(2), -1);
     list.for_each(print_item<int>);
     _BRK;
     return 0;

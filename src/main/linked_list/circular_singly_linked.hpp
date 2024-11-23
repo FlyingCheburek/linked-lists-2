@@ -151,7 +151,30 @@ public:
         if (temp == tail) push_front(data);
         else temp->next = new SinglyNode<T>(data, temp->next);
     }
-    
+    void insert_before(const SinglyNode<T>* at, const T data) override {
+        if (!in_list(at)) throw std::invalid_argument("Node address could not be found.");
+        if (at == tail->next) push_back(data);
+        else {
+            SinglyNode<T>* pred = tail->next, *curr = pred->next;
+            do {
+                if (curr == at) {
+                    pred->next = new SinglyNode<T>(data, curr);
+                    break;
+                }
+                pred = curr;
+                curr = curr->next;
+            } while(curr != tail->next);
+        }
+    }
+    void insert_before(const uint64_t index, const T data) override {
+        SinglyNode<T>* at = (SinglyNode<T>*)this->operator[](index);
+        if (at == tail->next) push_back(data);
+        else {
+            SinglyNode<T>* curr = tail->next;
+            while (curr->next != at) curr = curr->next;
+            curr->next = new SinglyNode<T>(data, at);
+        }
+    }
 };
 
 #endif
