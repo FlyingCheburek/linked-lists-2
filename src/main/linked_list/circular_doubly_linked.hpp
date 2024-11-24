@@ -1,5 +1,4 @@
 #include "doubly_linked.hpp"
-#include <iostream>
 
 #ifndef CIRCULAR_DOUBLY_LINKED_HPP
 #define CIRCULAR_DOUBLY_LINKED_HPP
@@ -124,7 +123,7 @@ public:
             tail = node;
         }
     }
-    
+
 };
 
 #endif 
