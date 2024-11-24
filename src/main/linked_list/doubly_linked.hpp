@@ -78,12 +78,12 @@ public:
         if (!node) throw std::out_of_range("List index out of range.");
         return node;
     }
-    inline uint64_t size() const noexcept override {
+    virtual inline uint64_t size() const noexcept override {
         uint64_t siz = 0;
         for (DoublyNode<T>* i = head; i; i = i->next) siz++;
         return siz;
     }
-    void reverse() noexcept override {
+    virtual void reverse() noexcept override {
         if (empty()) return;
         if (!head->next) return;
         DoublyNode<T>* pred = nullptr;

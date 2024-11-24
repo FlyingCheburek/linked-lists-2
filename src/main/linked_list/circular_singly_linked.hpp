@@ -75,7 +75,6 @@ public:
         temp = head_ref;
         head_ref = tail;
         tail = temp;
-        
     }
     inline bool empty() const noexcept override { return tail == nullptr; }
     void for_each(std::function<void(T item)> func) const noexcept override {

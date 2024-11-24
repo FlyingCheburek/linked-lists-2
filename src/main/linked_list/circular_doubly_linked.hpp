@@ -1,4 +1,5 @@
 #include "doubly_linked.hpp"
+#include <iostream>
 
 #ifndef CIRCULAR_DOUBLY_LINKED_HPP
 #define CIRCULAR_DOUBLY_LINKED_HPP
@@ -56,6 +57,31 @@ public:
         }
         return node;
     }
+    inline uint64_t size() const noexcept override {
+        if (empty()) return 0;
+        uint64_t siz = 0;
+        DoublyNode<T>* curr = tail->next;
+        do {
+            siz++;
+            curr = curr->next;
+        } while(curr != tail->next);
+        return siz;
+    }
+    void reverse() noexcept override {
+        if (empty()) return;
+        if (tail == tail->next) return;
+        DoublyNode<T>* head_ref = tail->next, *curr = head_ref, *pred = nullptr, *next = nullptr, *temp;
+        do {
+            next = curr->next;
+            curr->next = pred;
+            pred = curr;
+            curr = next;
+        } while (curr != head_ref);
+        head_ref->next = pred;
+        temp = head_ref;
+        head_ref = tail;
+        tail = temp;
+    }
     inline bool empty() const noexcept override { return tail == nullptr; }
     void for_each(std::function<void(T item)> func) const noexcept override {
         if (empty()) return;
@@ -67,6 +93,14 @@ public:
                 curr = curr->next;
             } while(curr != tail->next);
         }
+    }
+    T front() const override {
+        if (empty()) throw std::out_of_range("Cannot acess 'head' pointer from an empty list.");
+        return tail->next->data;
+    }
+    T back() const override {
+        if (empty()) throw std::out_of_range("Cannot acess 'head' pointer from an empty list.");
+        return tail->data;
     }
     void push_front(const T item) noexcept override {
         if (empty()) {
@@ -90,6 +124,7 @@ public:
             tail = node;
         }
     }
+    
 };
 
-#endif
+#endif 
