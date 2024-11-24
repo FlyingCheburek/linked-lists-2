@@ -23,6 +23,9 @@ private:
         while (back->next) back = back->next;
         return back;
     }
+    void quick_insert_after(const DoublyNode<T>* at, const T data) noexcept {
+        ((DoublyNode<T>*)at)->next = new DoublyNode<T>(data, at->next, (DoublyNode<T>*)at);
+    }
 
 protected:
     virtual bool in_list(const DoublyNode<T>* node) const noexcept {
@@ -31,9 +34,6 @@ protected:
             if (node == i) return true;
         }
         return false;
-    }
-    void quick_insert_after(const DoublyNode<T>* at, const T data) noexcept {
-        ((DoublyNode<T>*)at)->next = new DoublyNode<T>(data, at->next, (DoublyNode<T>*)at);
     }
 
 public:

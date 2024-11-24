@@ -7,7 +7,7 @@ template<class T>
 class CircularDoublyLinked final : public DoublyLinked<T> {
 private:
     DoublyNode<T>* tail = nullptr;
-    bool in_list(const DoublyNode<T>* node) const noexcept {
+    bool in_list(const DoublyNode<T>* node) const noexcept override {
         if (empty()) return false;
         if (tail != tail->next) {
             for (DoublyNode<T>* head = tail->next; head != tail; head = head->next) {
@@ -18,6 +18,22 @@ private:
     }
 
 public:
+    CircularDoublyLinked() noexcept {  }
+    CircularDoublyLinked(const std::vector<T>&& items) noexcept {
+        for (auto it = items.rbegin(); it != items.rend(); it++) {
+            push_front(*it);
+        }
+    }
+    CircularDoublyLinked(const std::vector<T>& items) noexcept {
+        for (auto it = items.rbegin(); it != items.rend(); it++) {
+            push_front(*it);
+        }
+    }
+    CircularDoublyLinked(const CircularDoublyLinked<T>& other) {
+        other.for_each([this](const T& x){
+            this->push_back(x);
+        });
+    }
     ~CircularDoublyLinked() noexcept {
         if (empty()) return;
         if (tail == tail->next) delete tail;
