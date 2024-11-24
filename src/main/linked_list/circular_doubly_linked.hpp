@@ -7,7 +7,73 @@ template<class T>
 class CircularDoublyLinked final : public DoublyLinked<T> {
 private:
     DoublyNode<T>* tail = nullptr;
-    
+    bool in_list(const DoublyNode<T>* node) const noexcept {
+        if (empty()) return false;
+        if (tail != tail->next) {
+            for (DoublyNode<T>* head = tail->next; head != tail; head = head->next) {
+                if (head == node) return true;
+            }
+        }
+        return tail == node;
+    }
+
+public:
+    ~CircularDoublyLinked() noexcept {
+        if (empty()) return;
+        if (tail == tail->next) delete tail;
+        else {
+            DoublyNode<T>* head = tail->next, *temp = head->next;
+            do {
+               delete head;
+               head = temp;
+               if (temp) temp = temp->next; 
+            } while(head != tail);
+            if (!empty()) delete tail;
+        }
+    }
+    const DoublyNode<T>* operator[](const uint64_t index) const noexcept {
+        if (empty()) return nullptr;
+        if (!index) return tail->next;
+        DoublyNode<T>* node = tail->next;
+        for (uint64_t x=1; x <= index; x++) {
+            node = node->next;
+        }
+        return node;
+    }
+    inline bool empty() const noexcept override { return tail == nullptr; }
+    void for_each(std::function<void(T item)> func) const noexcept override {
+        if (empty()) return;
+        if (tail == tail->next) func(tail->data);
+        else {
+            DoublyNode<T>* curr = tail->next;
+            do {
+                func(curr->data);
+                curr = curr->next;
+            } while(curr != tail->next);
+        }
+    }
+    void push_front(const T item) noexcept override {
+        if (empty()) {
+            tail = new DoublyNode<T>(item);
+            tail->pred = tail->next = tail;
+        }
+        else {
+            DoublyNode<T>* node = new DoublyNode<T>(item, tail->next, tail);
+            tail->next->pred = node;
+            tail->next = node;
+        }
+    }
+    void push_back(const T item) noexcept override {
+        if (empty()) {
+            tail = new DoublyNode<T>(item);
+            tail->pred = tail->next = tail;
+        }
+        else {
+            DoublyNode<T>* node = new DoublyNode<T>(item, tail->next, tail);
+            tail->next = node;
+            tail = node;
+        }
+    }
 };
 
 #endif

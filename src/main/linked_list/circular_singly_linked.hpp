@@ -16,10 +16,6 @@ private:
         }
         return tail == node;
     }
-    void quick_insert_after(const SinglyNode<T>* at, const T data) noexcept override {
-        if (at == tail) push_back(data);
-        else ((SinglyNode<T>*)at)->next = new SinglyNode<T>(data, at->next);
-    }
 
 public:
     CircularSinglyLinked() noexcept {  }

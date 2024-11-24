@@ -10,9 +10,15 @@ inline void print_item(const T& i) noexcept {
 // ...................
 
 int main() {
-    SinglyLinked<int> list;
-    DoublyLinked<int> list2;
-    CircularSinglyLinked<int> list3;
-    CircularDoublyLinked<int> list4;
+    CircularDoublyLinked<int> list;
+    list.for_each(print_item<int>);
+    _BRK;
+    list.push_back(0);
+    list.push_back(1);
+    list.push_back(2);
+    list.push_back(3);
+    list.push_front(-1);
+    list.for_each(print_item<int>);
+    _BRK;
     return 0;
 }

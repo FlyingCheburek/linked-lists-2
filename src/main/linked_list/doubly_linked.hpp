@@ -17,15 +17,15 @@ template<class T>
 class DoublyLinked : public SinglyLinked<T> {
 private:
     DoublyNode<T>* head = nullptr;
-
-protected:
     DoublyNode<T>* get_back() const noexcept {
         if (empty()) return nullptr;
         DoublyNode<T>* back = head;
         while (back->next) back = back->next;
         return back;
     }
-    bool in_list(const DoublyNode<T>* node) const noexcept {
+
+protected:
+    virtual bool in_list(const DoublyNode<T>* node) const noexcept {
         if (empty()) return false;
         for (DoublyNode<T>* i = head; i; i = i->next) {
             if (node == i) return true;
@@ -95,10 +95,10 @@ public:
         }
         head = pred->pred;
     }
-    inline bool empty() const noexcept override {
+    virtual inline bool empty() const noexcept override {
         return head == nullptr;
     }
-    void for_each(std::function<void(T item)> func) const noexcept override {
+    virtual void for_each(std::function<void(T item)> func) const noexcept override {
         for (DoublyNode<T>* node = head; node; node = node->next) func(node->data);
     }
     T front() const override {
@@ -109,12 +109,12 @@ public:
         if (empty()) throw std::out_of_range("Cannot acess 'head' pointer from an empty list.");
         return get_back()->data;
     }
-    void push_front(const T item) noexcept override {
+    virtual void push_front(const T item) noexcept override {
         DoublyNode<T>* node = new DoublyNode<T>(item, head);
         if (head) head->pred = node;
         head = node;
     }
-    void push_back(const T item) noexcept override {
+    virtual void push_back(const T item) noexcept override {
         if (!head) head = new DoublyNode<T>(item);
         else {
             DoublyNode<T>* node = new DoublyNode<T>(item, nullptr, get_back());
